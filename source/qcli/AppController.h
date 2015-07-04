@@ -20,6 +20,7 @@ public:
 
 class AppControllerFactory {
 public:
+    // create a corresponding child app controller
     virtual std::auto_ptr<AppController> create(void) = 0;
 };
 

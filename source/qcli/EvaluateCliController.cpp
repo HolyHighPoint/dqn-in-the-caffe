@@ -23,8 +23,8 @@
 using namespace std;
 
 int EvaluateCliController::execute(void) {
-    string command = argv_[0];
-    string load_file = USE_FILE_D;
+    string command = argv_[0];     // calling cli file name
+    string load_file = USE_FILE_D; // default file to load
     int argc = argv_.size();
 
     auto_ptr<AppController> to_execute;
@@ -33,6 +33,7 @@ int EvaluateCliController::execute(void) {
     
     int begining = (argc == 1) ? (1) :
         (argv_[1] == "evaluate" ? (2) : (1));
+    // to determine if command is present
 
     for (int i = begining; i < argc; i++) {
         if (argv_[i] == "-f") {
@@ -51,10 +52,12 @@ int EvaluateCliController::execute(void) {
         cerr << "bad arguments!" << endl; 
         to_execute = HelpControllerFactory(command, false).create();
     } else {
+        // parsed ok, get corresponding learn controller
         EvaluateController *mc = new EvaluateController(load_file);
         to_execute = auto_ptr<AppController>((AppController *)mc);
     }
 
     int return_value = to_execute->execute();
+    // evaluate and then return the value
     return return_value;
 }

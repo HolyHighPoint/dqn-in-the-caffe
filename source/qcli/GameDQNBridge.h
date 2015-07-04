@@ -14,12 +14,17 @@
 class GameDQNBridge {
 
 protected:
+    // game interface to use
     ALEInterface& ale_;
+    // dqn to play the game
     qlearning::DQN& dqn_;
+    // train the dqn or just play
     bool update_;
 
 public:
     GameDQNBridge(ALEInterface& ale, qlearning::DQN& dqn, const bool update);
+
+    // play the game for once
     double play(const double epsilon);
 };
 
