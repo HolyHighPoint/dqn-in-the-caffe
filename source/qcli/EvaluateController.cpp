@@ -29,7 +29,7 @@ int EvaluateController::execute(void) {
     ALEInterface ale(gui); ale.loadROM(rom);
     const ActionVect actions = ale.getMinimalActionSet();
 
-    dqn::DQN dqn(actions, solver, memory, gamm);
+    qlearning::DQN dqn(actions, solver, memory, gamm);
     dqn.Init(); dqn.LoadModel(load_file_);
 
     GameDQNBridge gdb(ale, dqn, false);

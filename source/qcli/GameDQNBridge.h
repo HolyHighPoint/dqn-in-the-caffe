@@ -15,11 +15,11 @@ class GameDQNBridge {
 
 protected:
     ALEInterface& ale_;
-    dqn::DQN& dqn_;
+    qlearning::DQN& dqn_;
     bool update_;
 
 public:
-    GameDQNBridge(ALEInterface& ale, dqn::DQN& dqn, const bool update);
+    GameDQNBridge(ALEInterface& ale, qlearning::DQN& dqn, const bool update);
     double play(const double epsilon);
 };
 

@@ -36,7 +36,7 @@ int LearnController::execute(void) {
     ALEInterface ale(gui); ale.loadROM(rom);
     const ActionVect actions = ale.getMinimalActionSet();
 
-    dqn::DQN dqn(actions, solver, memory, gamm);
+    qlearning::DQN dqn(actions, solver, memory, gamm);
     dqn.Init();
     dqn.LoadModel(save_file_);
     dqn.SaveModel(backup_file_);
