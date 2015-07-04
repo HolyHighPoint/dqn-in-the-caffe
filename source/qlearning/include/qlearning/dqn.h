@@ -1,5 +1,5 @@
-#ifndef DQN_HPP_
-#define DQN_HPP_
+#ifndef DQN_H
+#define DQN_H
 
 #include <memory>
 #include <random>
@@ -109,16 +109,7 @@ private:
     std::mt19937 random;
 };
 
-/**
- * Preprocess an ALE screen (downsampling & grayscaling)
- */
-FDataP PreprocessScreen(const ALEScreen& screen);
-
-/**
- * Draw a frame as a string
- */
-std::string DrawFrame(const FData& frame);
 
 }
 
-#endif /* DQN_HPP_ */
+#endif /* DQN_H */

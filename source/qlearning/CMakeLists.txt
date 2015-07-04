@@ -51,6 +51,7 @@ set(api_includes
 
 set(sources
     ${source_path}/dqn.cpp
+    ${source_path}/ale.cpp
 )
 
 # Group source files

@@ -31,6 +31,7 @@ project(${META_PROJECT_NAME} C CXX)
 option(OPTION_PORTABLE_INSTALL  "Install into a self-contained directory." OFF)
 option(OPTION_BUILD_STATIC      "Build static libraries." OFF)
 option(OPTION_BUILD_TESTS       "Build tests" ON)
+option(OPTION_ERRORS_AS_EXCEPTION "Enable exception" ON)
 
 if(OPTION_BUILD_STATIC)
    set(BUILD_SHARED_LIBS OFF)

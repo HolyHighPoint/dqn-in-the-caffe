@@ -13,7 +13,7 @@
 #include <string>
 #include <cstdlib>
 #include <ale_interface.hpp>
-#include <qlearning/dqn.hpp>
+#include <qlearning/dqn.h>
 
 using namespace std;
 

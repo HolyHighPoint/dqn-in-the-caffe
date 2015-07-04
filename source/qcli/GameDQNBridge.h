@@ -9,7 +9,7 @@
 #define GAME_DQN_BRIDGE_H_
 
 #include <ale_interface.hpp>
-#include <qlearning/dqn.hpp>
+#include <qlearning/dqn.h>
 
 class GameDQNBridge {
 
