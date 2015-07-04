@@ -38,6 +38,12 @@ endif()
 
 set(sources
     main.cpp
+    CliParser.cpp
+    EvaluateController.cpp
+    EvaluateCliController.cpp
+    LearnController.cpp
+    LearnCliController.cpp
+    GameDQNBridge.cpp
 )
 
 
