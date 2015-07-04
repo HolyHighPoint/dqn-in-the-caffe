@@ -49,4 +49,5 @@ revision
 Makefile
 
 *.swp
+*.bak
 *.*~
