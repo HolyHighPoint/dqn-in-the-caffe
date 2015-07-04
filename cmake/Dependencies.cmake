@@ -19,22 +19,6 @@ include_directories(SYSTEM ${GFLAGS_INCLUDE_DIRS})
 find_package(Protobuf REQUIRED)
 include_directories(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 
-# ---[ HDF5
-find_package(HDF5 COMPONENTS HL REQUIRED)
-include_directories(SYSTEM ${HDF5_INCLUDE_DIRS} ${HDF5_HL_INCLUDE_DIR})
-
-# ---[ LMDB
-find_package(LMDB REQUIRED)
-include_directories(SYSTEM ${LMDB_INCLUDE_DIR})
-
-# ---[ LevelDB
-find_package(LevelDB REQUIRED)
-include_directories(SYSTEM ${LevelDB_INCLUDE})
-
-# ---[ Snappy
-find_package(Snappy REQUIRED)
-include_directories(SYSTEM ${Snappy_INCLUDE_DIR})
-
 # ---[ ALE
 find_package(ALE REQUIRED)
 include_directories(SYSTEM ${ALE_INCLUDE_DIR})
@@ -42,14 +26,6 @@ include_directories(SYSTEM ${ALE_INCLUDE_DIR})
 # ---[ Caffe
 find_package(Caffe REQUIRED)
 include_directories(SYSTEM ${CAFFE_INCLUDE_DIR})
-
-# ---[ OpenCV
-find_package(OpenCV QUIET COMPONENTS core highgui imgproc imgcodecs)
-if(NOT OpenCV_FOUND) # if not OpenCV 3.x, then imgcodecs are not found
-  find_package(OpenCV REQUIRED COMPONENTS core highgui imgproc)
-endif()
-include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
-message(STATUS "OpenCV found (${OpenCV_CONFIG_PATH})")
 
 # ---[ BLAS
 if(NOT APPLE)

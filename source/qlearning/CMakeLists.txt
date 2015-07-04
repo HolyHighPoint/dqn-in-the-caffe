@@ -27,12 +27,6 @@ set(libs
     ${GLOG_LIBRARY}
     ${ALE_LIB}
     ${PROTOBUF_LIB}
-    #${Boost_LIB}
-    #${HDF5_LIB}
-    #${LMDB_LIB}
-    #${LevelDB_LIB}
-    #${Snappy_LIB}
-    #${OpenCV_LIB}
 )
 
 
