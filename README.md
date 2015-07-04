@@ -28,3 +28,8 @@ GitHub project hpicgs/cmake-init is used to generate the cross-platform CMake fi
 
 ## Author
 
+Jiguanglizipao <jiguanglizipao@163.com>
+
+Weijun Sun <swj14@mails.tsinghua.edu.cn>
+
+Jason Lau <i@dotkrnl.com>
