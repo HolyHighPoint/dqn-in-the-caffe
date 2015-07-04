@@ -5,7 +5,6 @@
 
 #include <vector>
 #include <random>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 
 #include <caffe/caffe.hpp>
@@ -20,7 +19,7 @@ private:
     typedef boost::shared_ptr<caffe::Blob<float> >              BlobP;
     typedef boost::shared_ptr<caffe::MemoryDataLayer<float> >   MemoryDataP;
     typedef boost::shared_ptr<caffe::Net<float> >               NetP;
-    typedef std::shared_ptr<caffe::Solver<float> >              SolverP;
+    typedef boost::shared_ptr<caffe::Solver<float> >            SolverP;
 
     const ActionVect  actions;                  // allowed action from ale 
     const std::string param;                    // solver proto text

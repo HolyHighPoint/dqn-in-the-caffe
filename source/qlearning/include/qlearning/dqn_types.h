@@ -1,9 +1,9 @@
 #ifndef DQN_TYPE_H_
 #define DQN_TYPE_H_
 
-#include <memory>
 #include <tuple>
 
+#include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
 
 #include <caffe/caffe.hpp>
@@ -29,7 +29,7 @@ typedef std::array<float, MSize * OCount> TargetIData;	// target_input_layer
 typedef std::array<float, MSize * OCount> FilterIData;	// filter_input_layer
 
 typedef std::array<uint8_t, CDSize> FData;	// frame data
-typedef std::shared_ptr<FData> FDataP;      // pointer to FData
+typedef boost::shared_ptr<FData> FDataP;    // pointer to FData
 typedef std::array<FDataP, 4> IFrames;      // input data
 typedef std::tuple<IFrames, Action, float, boost::optional<FDataP> >
                               Trans;        // replay type

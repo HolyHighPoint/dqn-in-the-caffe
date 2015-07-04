@@ -5,6 +5,7 @@
 #include <sstream>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/make_shared.hpp>
 
 namespace qlearning {
 
@@ -17,7 +18,7 @@ FDataP ALE::PreprocessScreen(const ALEScreen& tmp) {
     const double ratiox = FWidth / double(CSize);
     const double ratioy = FHeight / double(CSize);
     // destination FDataP
-    FDataP screen = std::make_shared<FData>();
+    FDataP screen = boost::make_shared<FData>();
 
     for (int i = 0; i < CSize; i++) {
         for (int j = 0; j < CSize; j++) {
