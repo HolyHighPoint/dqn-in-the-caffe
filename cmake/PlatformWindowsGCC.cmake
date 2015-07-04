@@ -46,7 +46,7 @@ set(MINGW_COMPILE_FLAGS
       -pipe         # -> use pipes
       -Wall         # -> 
       -Wextra       # -> 
-      -Werror       # ->
+    # -Werror       # ->
       -fPIC         # -> use position independent code
       
       -Wreturn-type 
