@@ -7,15 +7,15 @@ namespace qlearning {
 
 class ALE {
 private:
-	//convert pixel_t to RGB 
+	// convert pixel_t to RGB 
 	const std::array<int, 3> PixelToRGB(const pixel_t& pixel);
 	
-	//convert RGB to a grayscale
+	// convert RGB to a grayscale
 	uint8_t RGBToGrayscale(const std::array<int, 3>& rgb);
 	uint8_t PixelToGrayscale(const pixel_t pixel);
 	
 public:
-	//convert ALEScreen to framedata
+	// convert ALEScreen to framedata
 	FDataP PreprocessScreen(const ALEScreen& tmp);
 };
 
