@@ -1,7 +1,6 @@
-// File:            lib_CliParser.cpp
+// File:            CliParser.cpp
 // Description:     Implement the cli class for controller parsing
-// Author:          Jason Lau <i@dotkrnl.com>
-// Date:            2015-05-26
+// Date:            2015-07-04
 // License:         Apache
 // Feel free to contact me if there's any questions
 //
