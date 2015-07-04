@@ -27,6 +27,7 @@ set(libs
     ${GLOG_LIBRARY}
     ${ALE_LIB}
     ${PROTOBUF_LIB}
+    ${Boost_LIBRARIES}
 )
 
 

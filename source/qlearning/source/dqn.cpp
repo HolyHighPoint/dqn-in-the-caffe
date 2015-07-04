@@ -47,10 +47,10 @@ const std::array<int, 3> PixelToRGB(const pixel_t& pixel) {
         0x482c00, 0, 0x694d14, 0, 0x866a26, 0, 0xa28638, 0,
         0xbb9f47, 0, 0xd2b656, 0, 0xe8cc63, 0, 0xfce070, 0
     };
-    const auto rgb = ntsc_to_rgb[pixel];
-    const auto r = rgb >> 16;
-    const auto g = (rgb >> 8) & 0xFF;
-    const auto b = rgb & 0xFF;
+    const int rgb = ntsc_to_rgb[pixel];
+    const int r = rgb >> 16;
+    const int g = (rgb >> 8) & 0xFF;
+    const int b = rgb & 0xFF;
     return {r, g, b};
 }
 
@@ -162,9 +162,9 @@ std::pair<Action, float> DQN::SelectActionGreedily(const IFrames& frames) {
 
 std::vector<std::pair<Action, float>> DQN::SelectActionGreedily(const std::vector<IFrames>& frames) {
     std::array<float, MDSize> input;
-    for (auto i = 0; i < frames.size(); ++i) {
+    for (size_t i = 0; i < frames.size(); ++i) {
         // Input frames to the net and compute Q values for each legal actions
-        for (auto j = 0; j < ICount; j++) {
+        for (size_t j = 0; j < ICount; j++) {
             const auto& frame_data = frames[i][j];
             std::copy(frame_data->begin(), frame_data->end(), input.begin() + i * IDSize + j * CDSize);
         }
