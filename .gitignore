@@ -47,3 +47,5 @@ CMakeFiles
 cmake_install.cmake
 revision
 Makefile
+
+*.swp
