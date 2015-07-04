@@ -41,12 +41,12 @@ int LearnController::execute(void) {
     dqn.LoadModel(save_file_);
     dqn.SaveModel(backup_file_);
 
-    GameDQNBridge gdb(ale, dqn, false);
+    GameDQNBridge gdb(ale, dqn, true);
     for (int episode = 0; ; episode++) {
         cout << "Learning #" << episode << endl;
         const double epsilon = get_epsilon(dqn.get_iter());
         gdb.play(epsilon);
-        if (dqn.get_iter() % evaluate_time == 0) {
+        if (episode % evaluate_time == 0) {
             const double score = gdb.play(USE_LWE_D);
             cout << "score = " << score << endl;
         }
