@@ -13,7 +13,7 @@ if(USE_CUDNN)
   link_directories(~/cudnn-6.5-linux-R1)
 endif()
 
-add_executable(dqn dqn_main.cpp dqn.cpp)
+add_executable(dqn main.cpp dqn.cpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=native")
 
