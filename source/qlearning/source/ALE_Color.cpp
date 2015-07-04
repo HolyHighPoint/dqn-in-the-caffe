@@ -8,9 +8,10 @@
 
 namespace qlearning {
 
-//convert pixel_t to RGB 
 const std::array<int, 3> ALE::PixelToRGB(const pixel_t& pixel) {
-    constexpr int ntsc_to_rgb[] = {
+    // convert pixel_t to RGB
+    // pixel is ale returned value with ntsc format
+    const int ntsc_to_rgb[] = {
         0x000000, 0, 0x4a4a4a, 0, 0x6f6f6f, 0, 0x8e8e8e, 0,
         0xaaaaaa, 0, 0xc0c0c0, 0, 0xd6d6d6, 0, 0xececec, 0,
         0x484800, 0, 0x69690f, 0, 0x86861d, 0, 0xa2a22a, 0,
@@ -48,53 +49,18 @@ const std::array<int, 3> ALE::PixelToRGB(const pixel_t& pixel) {
     const int r = rgb >> 16;
     const int g = (rgb >> 8) & 0xFF;
     const int b = rgb & 0xFF;
-    return {r, g, b};
+    return {{r, g, b}};
 }
 
-//convert RGB to a grayscale
 uint8_t ALE::RGBToGrayscale(const std::array<int, 3>& rgb) {
+    // convert RGB color to grayscale value between 0-255
     return rgb[0] * 0.21 + rgb[1] * 0.72 + rgb[2] * 0.07;
 }
 
 uint8_t ALE::PixelToGrayscale(const pixel_t pixel) {
+    // convert pixel_t to grayscale
+    // pixel is ale returned value with ntsc format
     return RGBToGrayscale(PixelToRGB(pixel));
-}
-
-//convert ALEScreen to framedata
-FDataP ALE::PreprocessScreen(const ALEScreen& tmp) {
-    const auto pixels = tmp.getArray();
-    FDataP screen = std::make_shared<FData>();
-    const double ratiox = FWidth / static_cast<double>(CSize);
-    const double ratioy = FHeight / static_cast<double>(CSize);
-    for(int i = 0; i < CSize; i++) {
-        for(int j = 0; j < CSize; j++) {
-            const int firstx = static_cast<int>(std::floor(j * ratiox));
-            const int lastx = static_cast<int>(std::floor((j + 1) * ratiox));
-            const int firsty = static_cast<int>(std::floor(i * ratioy));
-            const int lasty = static_cast<int>(std::floor((i + 1) * ratioy));
-            uint8_t color = 0.0;
-            for(int x = firstx; x <= lastx; x++) {
-                double pixelx = 1.0;
-                if (x == firstx) {
-                    pixelx = x + 1 - j * ratiox;
-                } else if (x == lastx) {
-                    pixelx = ratiox * (j + 1) - x;
-                }
-                for(int y = firsty; y <= lasty; y++) {
-                    double pixely = 1.0;
-                    if (y == firsty) {
-                        pixely = y + 1 - i * ratioy;
-                    } else if (y == lasty) {
-                        pixely = ratioy * (i + 1) - y;
-                    }
-                    const uint8_t grayscale = PixelToGrayscale(pixels[static_cast<int>(y * FWidth + x)]);
-                    color += (pixelx / ratiox) * (pixely / ratioy) * grayscale;
-                }
-            }
-            (*screen)[i * CSize + j] = color;
-        }
-    }
-    return screen;
 }
 
 }
