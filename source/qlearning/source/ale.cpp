@@ -8,10 +8,7 @@
 
 namespace qlearning {
 
-/**
- * Convert pixel_t (NTSC) to RGB values.
- * Each value range [0,255]
- */
+//convert pixel_t to RGB 
 const std::array<int, 3> ALE::PixelToRGB(const pixel_t& pixel) {
     constexpr int ntsc_to_rgb[] = {
         0x000000, 0, 0x4a4a4a, 0, 0x6f6f6f, 0, 0x8e8e8e, 0,
@@ -54,11 +51,8 @@ const std::array<int, 3> ALE::PixelToRGB(const pixel_t& pixel) {
     return {r, g, b};
 }
 
-/**
- * Convert RGB values to a grayscale value [0,255].
- */
+//convert RGB to a grayscale
 uint8_t ALE::RGBToGrayscale(const std::array<int, 3>& rgb) {
-    // Normalized luminosity grayscale
     return rgb[0] * 0.21 + rgb[1] * 0.72 + rgb[2] * 0.07;
 }
 
@@ -66,6 +60,7 @@ uint8_t ALE::PixelToGrayscale(const pixel_t pixel) {
     return RGBToGrayscale(PixelToRGB(pixel));
 }
 
+//convert ALEScreen to framedata
 FDataP ALE::PreprocessScreen(const ALEScreen& tmp) {
     const auto pixels = tmp.getArray();
     FDataP screen = std::make_shared<FData>();
@@ -100,17 +95,6 @@ FDataP ALE::PreprocessScreen(const ALEScreen& tmp) {
         }
     }
     return screen;
-}
-
-std::string ALE::DrawFrame(const FData& frame) {
-    std::stringstream ss;
-    for(int i = 0; i < CSize; i++) {
-        for(int j = 0; j < CSize; j++) {
-            ss << std::hex << int(frame[i * CSize + j] / 16);
-        }
-        ss << std::endl;
-    }
-    return ss.str();
 }
 
 }
