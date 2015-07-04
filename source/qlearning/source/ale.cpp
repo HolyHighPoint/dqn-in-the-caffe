@@ -6,7 +6,7 @@
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 
-namespace dqn {
+namespace qlearning {
 
 /**
  * Convert pixel_t (NTSC) to RGB values.

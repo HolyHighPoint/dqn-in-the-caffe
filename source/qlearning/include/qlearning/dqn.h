@@ -11,7 +11,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/optional.hpp>
 
-namespace dqn {
+namespace qlearning {
 
 const int FHeight = 210;
 const int FWidth = 160;

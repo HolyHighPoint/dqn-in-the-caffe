@@ -7,7 +7,7 @@
 #include <boost/algorithm/string.hpp>
 
 using namespace caffe;
-namespace dqn{
+namespace qlearning{
 
 void DQN::LoadModel(const std::string& model) {
     solver->net()->CopyTrainedLayersFrom(model);

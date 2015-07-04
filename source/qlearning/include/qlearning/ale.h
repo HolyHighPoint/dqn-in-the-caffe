@@ -3,7 +3,7 @@
 
 #include <qlearning/dqn.h>
 
-namespace dqn {
+namespace qlearning {
 
 class ALE {
 private:
