@@ -7,7 +7,7 @@
 #include <boost/algorithm/string.hpp>
 #include <glog/logging.h>
 #include "prettyprint.hpp"
-
+using namespace caffe;
 namespace dqn {
 
 /**
@@ -171,8 +171,17 @@ bool HasBlobSize(
 }
 
 void DQN::LoadTrainedModel(const std::string& model_bin) {
-  net_->CopyTrainedLayersFrom(model_bin);
+  solver_->net()->CopyTrainedLayersFrom(model_bin);
 }
+
+void DQN::SaveTrainedModel(const std::string& model_bin) {
+  NetParameter net_param;
+  // For intermediate results, we will also dump the gradient values.
+  solver_->net()->ToProto(&net_param);
+  LOG(INFO) << "SaveTrainedModel to " << model_bin;
+  WriteProtoToBinaryFile(net_param, model_bin.c_str());
+}
+
 
 void DQN::Initialize() {
   // Initialize net and solver

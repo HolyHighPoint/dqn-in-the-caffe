@@ -16,7 +16,9 @@ DEFINE_double(gamma, 0.95, "Discount factor of future rewards (0,1]");
 DEFINE_int32(memory_threshold, 100, "Enough amount of transitions to start learning");
 DEFINE_int32(skip_frame, 3, "Number of frames skipped");
 DEFINE_bool(show_frame, false, "Show the current frame in CUI");
-DEFINE_string(model, "", "Model file to load");
+DEFINE_string(load, "result.caffemodel", "Model file to load");
+DEFINE_string(backup, "backup.caffemodel", "Model file to backup");
+DEFINE_string(save, "result.caffemodel", "Model file to save");
 DEFINE_bool(evaluate, false, "Evaluation mode: only playing a game, no updates");
 DEFINE_double(evaluate_with_epsilon, 0.05, "Epsilon value to be used in evaluation mode");
 DEFINE_double(repeat_games, 1, "Number of games played in evaluation mode");
@@ -115,13 +117,14 @@ int main(int argc, char** argv) {
   dqn::DQN dqn(legal_actions, FLAGS_solver, FLAGS_memory, FLAGS_gamma);
   dqn.Initialize();
 
-  if (!FLAGS_model.empty()) {
-    // Just evaluate the given trained model
-    std::cout << "Loading " << FLAGS_model << std::endl;
+  if (!FLAGS_load.empty()) {
+    // Just evaluate the given trained model'
+    dqn.LoadTrainedModel(FLAGS_load);
+    dqn.SaveTrainedModel(FLAGS_backup);
+    std::cout << "Loading " << FLAGS_load << std::endl;
   }
 
   if (FLAGS_evaluate) {
-    dqn.LoadTrainedModel(FLAGS_model);
     auto total_score = 0.0;
     for (auto i = 0; i < FLAGS_repeat_games; ++i) {
       std::cout << "game: " << i << std::endl;
@@ -143,6 +146,7 @@ int main(int argc, char** argv) {
       const auto eval_score = PlayOneEpisode(ale, dqn, 0.05, false);
       std::cout << "evaluation score: " << eval_score << std::endl;
     }
+    dqn.SaveTrainedModel(FLAGS_save);
   }
 };
 

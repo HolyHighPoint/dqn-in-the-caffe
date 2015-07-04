@@ -59,7 +59,9 @@ public:
    * Load a trained model from a file.
    */
   void LoadTrainedModel(const std::string& model_file);
-
+  
+  void SaveTrainedModel(const std::string& model_file);
+  
   /**
    * Select an action by epsilon-greedy.
    */
