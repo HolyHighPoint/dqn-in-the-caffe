@@ -14,15 +14,26 @@ For example:
 
 ## Usage
 
-    ./qcli -gui -evaluate -solver "../data/dqn_solver.prototxt" -load "../data/result.caffemodel" -rom "../data/breakout.bin"
+    ./qcli learn
+    ./qcli evaluate
 
 ## Todo
 
 ## Reference
 
+Human-level control through deep reinforcement learning
+
+Playing Atari with Deep Reinforcement Learning
+
+http://caffe.berkeleyvision.org/
+
+http://www.arcadelearningenvironment.org/
+
 https://github.com/kuz/DeepMind-Atari-Deep-Q-Learner
 
-http://people.idsia.ch/~juergen/naturedeepmind.html
+https://github.com/muupan/dqn-in-the-caffe
+
+http://www.infoq.com/cn/news/2014/10/deepmind/
 
 GitHub project hpicgs/cmake-init is used to generate the cross-platform CMake files.
 
