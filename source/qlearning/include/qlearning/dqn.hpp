@@ -13,112 +13,111 @@
 
 namespace dqn {
 
-constexpr auto kRawFrameHeight = 210;
-constexpr auto kRawFrameWidth = 160;
-constexpr auto kCroppedFrameSize = 84;
-constexpr auto kCroppedFrameDataSize = kCroppedFrameSize * kCroppedFrameSize;
-constexpr auto kInputFrameCount = 4;
-constexpr auto kInputDataSize = kCroppedFrameDataSize * kInputFrameCount;
-constexpr auto kMinibatchSize = 32;
-constexpr auto kMinibatchDataSize = kInputDataSize * kMinibatchSize;
-constexpr auto kGamma = 0.95f;
-constexpr auto kOutputCount = 18;
+const int FHeight = 210;
+const int FWidth = 160;
+const int CSize = 84;
+const int CDSize = CSize * CSize;
+const int ICount = 4;
+const int IDSize = CDSize * ICount;
+const int MSize = 32;
+const int MDSize = IDSize * MSize;
+const int OCount = 18;
+const float Gamma = 0.95f;
 
-using FrameData = std::array<uint8_t, kCroppedFrameDataSize>;
-using FrameDataSp = std::shared_ptr<FrameData>;
-using InputFrames = std::array<FrameDataSp, 4>;
-using Transition = std::tuple<InputFrames, Action, float, boost::optional<FrameDataSp>>;
+typedef std::array<uint8_t, CDSize> FData;
+typedef std::shared_ptr<FData> FDataP;
+typedef std::array<FDataP, 4> IFrames;
+typedef std::tuple<IFrames, Action, float, boost::optional<FDataP> > Trans;
 
-using FramesLayerInputData = std::array<float, kMinibatchDataSize>;
-using TargetLayerInputData = std::array<float, kMinibatchSize * kOutputCount>;
-using FilterLayerInputData = std::array<float, kMinibatchSize * kOutputCount>;
+typedef std::array<float, MDSize> FramesIData;
+typedef std::array<float, MSize * OCount> TargetIData;
+typedef std::array<float, MSize * OCount> FilterIData;
 
 /**
  * Deep Q-Network
  */
 class DQN {
 public:
-  DQN(
-      const ActionVect& legal_actions,
-      const std::string& solver_param,
-      const int replay_memory_capacity,
-      const double gamma) :
-        legal_actions_(legal_actions),
-        solver_param_(solver_param),
-        replay_memory_capacity_(replay_memory_capacity),
-        gamma_(gamma),
-        current_iter_(0),
-        random_engine(0) {}
+    DQN(const ActionVect& _actions, const std::string& _param, const int _ReplaySize, const double _gamma, const int _seed = 0)
+        :
+        actions(_actions),
+        param(_param),
+        ReplaySize(_ReplaySize),
+        gamma(_gamma),
+        iter(0),
+        random(_seed)
+    {
 
-  /**
+    }
+
+    /**
    * Initialize DQN. Must be called before calling any other method.
    */
-  void Initialize();
+    void Init();
 
-  /**
+    /**
    * Load a trained model from a file.
    */
-  void LoadTrainedModel(const std::string& model_file);
-  
-  void SaveTrainedModel(const std::string& model_file);
-  
-  /**
+    void LoadModel(const std::string& model);
+
+    void SaveModel(const std::string& model);
+
+    /**
    * Select an action by epsilon-greedy.
    */
-  Action SelectAction(const InputFrames& input_frames, double epsilon);
+    Action SelectAction(const IFrames& frames, double epsilon);
 
-  /**
+    /**
    * Add a transition to replay memory
    */
-  void AddTransition(const Transition& transition);
+    void AddTrans(const Trans& trans);
 
-  /**
+    /**
    * Update DQN using one minibatch
    */
-  void Update();
+    void Update();
 
-  int memory_size() const { return replay_memory_.size(); }
-  int current_iteration() const { return current_iter_; }
+    int get_size() const {
+        return Replay.size();
+    }
+    int get_iter() const {
+        return iter;
+    }
 
 private:
-  using SolverSp = std::shared_ptr<caffe::Solver<float>>;
-  using NetSp = boost::shared_ptr<caffe::Net<float>>;
-  using BlobSp = boost::shared_ptr<caffe::Blob<float>>;
-  using MemoryDataLayerSp = boost::shared_ptr<caffe::MemoryDataLayer<float>>;
+    typedef std::shared_ptr<caffe::Solver<float> > SolverP;
+    typedef boost::shared_ptr<caffe::Net<float> > NetP;
+    typedef boost::shared_ptr<caffe::Blob<float> > BlobP;
+    typedef boost::shared_ptr<caffe::MemoryDataLayer<float> > MemoryDataP;
 
-  std::pair<Action, float> SelectActionGreedily(const InputFrames& last_frames);
-  std::vector<std::pair<Action, float>> SelectActionGreedily(
-      const std::vector<InputFrames>& last_frames);
-  void InputDataIntoLayers(
-      const FramesLayerInputData& frames_data,
-      const TargetLayerInputData& target_data,
-      const FilterLayerInputData& filter_data);
+    std::pair<Action, float> SelectActionGreedily(const IFrames& frames);
+    std::vector<std::pair<Action, float> > SelectActionGreedily(const std::vector<IFrames>& frames);
 
-  const ActionVect legal_actions_;
-  const std::string solver_param_;
-  const int replay_memory_capacity_;
-  const double gamma_;
-  int current_iter_;
-  std::deque<Transition> replay_memory_;
-  SolverSp solver_;
-  NetSp net_;
-  BlobSp q_values_blob_;
-  MemoryDataLayerSp frames_input_layer_;
-  MemoryDataLayerSp target_input_layer_;
-  MemoryDataLayerSp filter_input_layer_;
-  TargetLayerInputData dummy_input_data_;
-  std::mt19937 random_engine;
+    void Input(const FramesIData& frames, const TargetIData& target, const FilterIData& filter);
+
+    const ActionVect actions;
+    const std::string param;
+    const int ReplaySize;
+    const double gamma;
+    int iter;
+    std::deque<Trans> Replay;
+    SolverP solver;
+    NetP net;
+    BlobP blob;
+    MemoryDataP frames_input, target_input, filter_input;
+    TargetIData dummy_input;
+    std::mt19937 random;
 };
 
 /**
  * Preprocess an ALE screen (downsampling & grayscaling)
  */
-FrameDataSp PreprocessScreen(const ALEScreen& raw_screen);
+FDataP PreprocessScreen(const ALEScreen& screen);
 
 /**
  * Draw a frame as a string
  */
-std::string DrawFrame(const FrameData& frame);
+std::string DrawFrame(const FData& frame);
 
 }
 
