@@ -66,15 +66,6 @@ std::vector<std::pair<Action, float>> DQN::SelectActionPredict(const std::vector
 
 // initialize DQN
 void DQN::Init() {
-    // initialize input layers
-    #define INIT_LAYER(NAME) NAME = \
-        boost::dynamic_pointer_cast<caffe::MemoryDataLayer<float> >( \
-            net->layer_by_name(#NAME"_layer"));
-    INIT_LAYER(frames_input);
-    INIT_LAYER(target_input);
-    INIT_LAYER(filter_input);
-    #undef INIT_LAYER
-
     // initialize net and solver
     caffe::SolverParameter solver_param;
     caffe::ReadProtoFromTextFileOrDie(param, &solver_param);
@@ -86,6 +77,15 @@ void DQN::Init() {
 
     // initialize output blob
     blob = net->blob_by_name("q_values");
+
+    // initialize input layers
+    #define INIT_LAYER(NAME) NAME = \
+        boost::dynamic_pointer_cast<caffe::MemoryDataLayer<float> >( \
+            net->layer_by_name(#NAME"_layer"));
+    INIT_LAYER(frames_input);
+    INIT_LAYER(target_input);
+    INIT_LAYER(filter_input);
+    #undef INIT_LAYER
 }
 
 // update solver
