@@ -44,7 +44,6 @@ int LearnController::execute(void) {
 
     // initialize dqn with given parameters
     qlearning::DQN dqn(actions, solver, memory, gamm);
-    dqn.Init();
     // and load trained network from file
     dqn.LoadModel(save_file_);
     // save a .bak file as backup

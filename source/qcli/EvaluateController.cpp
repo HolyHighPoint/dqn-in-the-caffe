@@ -33,7 +33,7 @@ int EvaluateController::execute(void) {
     // initialize dqn with given parameters
     qlearning::DQN dqn(actions, solver, memory, gamm);
     // and load trained network from file
-    dqn.Init(); dqn.LoadModel(load_file_);
+    dqn.LoadModel(load_file_);
 
     // link the game w/the dqn without training
     GameDQNBridge gdb(ale, dqn, false);

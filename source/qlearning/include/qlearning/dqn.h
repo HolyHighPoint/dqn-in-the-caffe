@@ -49,9 +49,10 @@ private:
 
 public:
     DQN(const ActionVect& _actions, const std::string& _param, const int _ReplaySize, const double _gamma, const int _seed = 0)
-        : actions(_actions), param(_param), replay_size(_ReplaySize), gamma(_gamma), iter(0), random(_seed) { } 
+        : actions(_actions), param(_param), replay_size(_ReplaySize), gamma(_gamma), iter(0), random(_seed) { Init(); }
 
-    void Init();                                // init qlearning
+    void Init();                                // init dqn
+
     void Update();                              // update solver
 
     void LoadModel(const std::string& model);   // load & save trained model
