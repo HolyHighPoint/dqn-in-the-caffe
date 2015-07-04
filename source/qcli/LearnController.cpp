@@ -57,7 +57,7 @@ int LearnController::execute(void) {
         // output debug info to show the trained times
         cout << "Learning #" << episode << endl;
         // get the best epsilon value for corresponding iterated count
-        const double epsilon = get_epsilon(dqn.get_iter());
+        const double epsilon = get_epsilon(dqn.GetIter());
         // let dqn to play game, for training
         gdb.play(epsilon);
         if (episode % evaluate_time == 0) {

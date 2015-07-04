@@ -1,105 +1,70 @@
-#ifndef DQN_H
-#define DQN_H
+#ifndef DQN_H_
+#define DQN_H_
 
-#include <memory>
-#include <random>
-#include <tuple>
-#include <unordered_map>
+#include <qlearning/dqn_types.h>
+
 #include <vector>
-#include <ale_interface.hpp>
+#include <random>
+#include <memory>
+#include <boost/shared_ptr.hpp>
+
 #include <caffe/caffe.hpp>
-#include <boost/functional/hash.hpp>
-#include <boost/optional.hpp>
+#include <ale_interface.hpp>
 
 namespace qlearning {
 
-const int FHeight = 210;				//frame height
-const int FWidth = 160;					//frame width
-const int CSize = 84;					//cutted frame width
-const int CDSize = CSize * CSize;		//cutted frame size
-const int ICount = 4;					//frame number
-const int IDSize = CDSize * ICount;		//input size
-const int MSize = 32;					//batch size
-const int MDSize = IDSize * MSize;		//data batch size 
-const int OCount = 18;					//output size
-const float Gamma = 0.95f;				
-
-typedef std::array<uint8_t, CDSize> FData;	//frame data
-typedef std::shared_ptr<FData> FDataP;
-typedef std::array<FDataP, 4> IFrames;		//input data
-typedef std::tuple<IFrames, Action, float, boost::optional<FDataP> > Trans;	//replay type
-
-typedef std::array<float, MDSize> FramesIData;			//frames_input_layer data
-typedef std::array<float, MSize * OCount> TargetIData;	//target_input_layer data
-typedef std::array<float, MSize * OCount> FilterIData;	//filter_input_layer data
-
-//Bridge between qlearning & caffe
+// bridge between qlearning & caffe
 class DQN {
-public:
-    DQN(const ActionVect& _actions, const std::string& _param, const int _ReplaySize, const double _gamma, const int _seed = 0)
-        :
-        actions(_actions),
-        param(_param),
-        ReplaySize(_ReplaySize),
-        gamma(_gamma),
-        iter(0),
-        random(_seed)
-    {
-
-    }
-
-    //init qlearning
-    void Init();
-
-    //load & save trained model
-    void LoadModel(const std::string& model);
-
-    void SaveModel(const std::string& model);
-
-    //predict or random
-    Action SelectAction(const IFrames& frames, double epsilon);
-
-    //Add data to Replay
-    void AddTrans(const Trans& trans);
-
-    //update solver
-    void Update();
-
-	//interface of Replay
-    int get_size() const {
-        return Replay.size();
-    }
-    int get_iter() const {
-        return iter;
-    }
 
 private:
-    typedef std::shared_ptr<caffe::Solver<float> > SolverP;
-    typedef boost::shared_ptr<caffe::Net<float> > NetP;
-    typedef boost::shared_ptr<caffe::Blob<float> > BlobP;
-    typedef boost::shared_ptr<caffe::MemoryDataLayer<float> > MemoryDataP;
-	
-	//prediction
-    std::pair<Action, float> SelectActionPredict(const IFrames& frames);	
-    std::vector<std::pair<Action, float> > SelectActionPredict(const std::vector<IFrames>& frames);
+    typedef boost::shared_ptr<caffe::Blob<float> >              BlobP;
+    typedef boost::shared_ptr<caffe::MemoryDataLayer<float> >   MemoryDataP;
+    typedef boost::shared_ptr<caffe::Net<float> >               NetP;
+    typedef std::shared_ptr<caffe::Solver<float> >              SolverP;
 
-	//send input data to caffe
-    void Input(const FramesIData& frames, const TargetIData& target, const FilterIData& filter);
+    const ActionVect  actions;                  // allowed action from ale 
+    const std::string param;                    // solver proto text
+    const int         replay_size;              // max size of replay
+    const double      gamma;                    // constant in the paper
+    int               iter;                     // current times
+    std::mt19937      random;                   // random number maker
 
-    const ActionVect actions;	//allowed action from ale 
-    const std::string param;	//param
-    const int ReplaySize;		//max size of Replay
-    const double gamma;			
-    int iter;					//current times
-    std::deque<Trans> Replay;	//Replay data
-    SolverP solver;				//caffe solver
-    NetP net;					//solver's net
-    BlobP blob;					//output blob
-    //data of layers
-    MemoryDataP frames_input, target_input, filter_input;
+    SolverP     solver;                         // caffe solver
+    NetP        net;                            // solver's net
+    MemoryDataP frames_input,
+                target_input,
+                filter_input;                   // data of layers
     TargetIData dummy_input;
-    //random number maker
-    std::mt19937 random;
+    std::deque<Trans> replay;                   // replay data
+
+    BlobP blob;                                 // output blob
+
+
+    void Input(const FramesIData& frames,
+               const TargetIData& target,
+               const FilterIData& filter); // send input data to caffe
+    std::pair<Action, float>
+        SelectActionPredict(const IFrames& frames); // prediction
+    std::vector<std::pair<Action, float> >
+        SelectActionPredict(const std::vector<IFrames>& frames);
+
+public:
+    DQN(const ActionVect& _actions, const std::string& _param, const int _ReplaySize, const double _gamma, const int _seed = 0)
+        : actions(_actions), param(_param), replay_size(_ReplaySize), gamma(_gamma), iter(0), random(_seed) { } 
+
+    void Init();                                // init qlearning
+    void Update();                              // update solver
+
+    void LoadModel(const std::string& model);   // load & save trained model
+    void SaveModel(const std::string& model);
+
+    void AddTrans(const Trans& trans);          // add data to replay
+
+    Action SelectAction(const IFrames& frames, double epsilon); // predict or random
+
+    int GetSize() const { return replay.size(); }
+    int GetIter() const { return iter; }
+
 };
 
 

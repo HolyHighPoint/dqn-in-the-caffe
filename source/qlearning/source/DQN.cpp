@@ -89,28 +89,28 @@ std::vector<std::pair<Action, float>> DQN::SelectActionPredict(const std::vector
     return results;
 }
 
-//Add data to Replay
+//Add data to replay
 void DQN::AddTrans(const Trans& trans) {
-    if (Replay.size() == ReplaySize) {
-        Replay.pop_front();
+    if (replay.size() == replay_size) {
+        replay.pop_front();
     }
-    Replay.push_back(trans);
+    replay.push_back(trans);
 }
 
 //update solver
 void DQN::Update() {
-    //get data from Replay randomly
+    //get data from replay randomly
     std::vector<int> trans;
     trans.reserve(MSize);
     for(int i = 0; i < MSize; i++) {
-        const int idx = std::uniform_int_distribution<int>(0, Replay.size() - 1)(random);
+        const int idx = std::uniform_int_distribution<int>(0, replay.size() - 1)(random);
         trans.push_back(idx);
     }
 
     //compute prediction max Q(s,a)
     std::vector<IFrames> target;
     for (size_t idx=0; idx<trans.size(); idx++) {
-        const Trans& transition = Replay[idx];
+        const Trans& transition = replay[idx];
         if (!std::get<3>(transition)) {
             //The last state s
             continue;
@@ -134,7 +134,7 @@ void DQN::Update() {
     std::fill(filter_input.begin(), filter_input.end(), 0.0f); 
     int idx = 0;
     for (int i = 0; i < MSize; i++) {
-        const Trans& transition = Replay[trans[i]];
+        const Trans& transition = replay[trans[i]];
         const Action action = std::get<1>(transition);
         const double reward = std::get<2>(transition);
         //feedback

@@ -14,7 +14,6 @@
 #include <exception>
 #include <cstdlib>
 #include <qlearning/dqn.h>
-#include <qlearning/ale.h>
 
 int main(int argc, char *argv[]) {
     try {

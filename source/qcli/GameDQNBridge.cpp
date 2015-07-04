@@ -48,7 +48,7 @@ double GameDQNBridge::play(double epsilon) {
             if (update_) {
                 const auto trans = ale_.game_over() ? qlearning::Trans(input, action, reward, boost::none) : qlearning::Trans(input, action, reward, ale.PreprocessScreen(ale_.getScreen()));
                 dqn_.AddTrans(trans);
-                if (dqn_.get_size() > memory_threshold) {
+                if (dqn_.GetSize() > memory_threshold) {
                     dqn_.Update();
                 }
             }
