@@ -19,14 +19,18 @@
 
 class EvaluateController: public AppController {
 private:
+    // evaluating epsilon to use
     double evaluate_with_epsilon_;
 
+    // q network file to load
     std::string load_file_;
 
 public:
+    // create a evaluate controller with given q network
     EvaluateController(std::string load_file);
     ~EvaluateController(void);
     
+    // execute the controller to evaluate game with the dqn
     virtual int execute(void);
 };
 

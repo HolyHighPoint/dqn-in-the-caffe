@@ -19,13 +19,18 @@
 
 class LearnController: public AppController {
 private:
+    // q network file to save the trained result
     std::string save_file_;
+
+    // q network file for backing up
     std::string backup_file_;
 
 public:
+    // create a learn controller with given q network files
     LearnController(std::string save_file, std::string backup_file);
     ~LearnController(void);
     
+    // execute the controller to train dqn to play game
     virtual int execute(void);
 };
 

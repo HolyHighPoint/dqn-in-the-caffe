@@ -23,8 +23,8 @@
 using namespace std;
 
 int LearnCliController::execute(void) {
-    string command = argv_[0];
-    string save_file = USE_FILE_D;
+    string command = argv_[0];     // calling cli file name
+    string save_file = USE_FILE_D; // default file to save
     int argc = argv_.size();
 
     auto_ptr<AppController> to_execute;
@@ -33,6 +33,7 @@ int LearnCliController::execute(void) {
     
     int begining = (argc == 1) ? (1) :
         (argv_[1] == "learn" ? (2) : (1));
+    // to determine if command is present
 
     for (int i = begining; i < argc; i++) {
         if (argv_[i] == "-f") {
@@ -51,10 +52,12 @@ int LearnCliController::execute(void) {
         cerr << "bad arguments!" << endl; 
         to_execute = HelpControllerFactory(command, false).create();
     } else {
+        // parsed ok, get corresponding learn controller
         LearnController *mc = new LearnController(save_file, save_file + ".bak");
         to_execute = auto_ptr<AppController>((AppController *)mc);
     }
 
     int return_value = to_execute->execute();
+    // evaluate and then return the value
     return return_value;
 }
