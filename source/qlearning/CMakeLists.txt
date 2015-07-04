@@ -50,7 +50,7 @@ set(api_includes
 )
 
 set(sources
-    ${source_path}/dqn.cpp
+    ${source_path}/DQN.cpp
     ${source_path}/ALE_Color.cpp
     ${source_path}/ALE_Screen.cpp
 )
